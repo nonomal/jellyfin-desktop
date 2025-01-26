@@ -109,16 +109,24 @@ def get_profile(
         else:
             video_bitrate = settings.local_kbps
 
-    if settings.transcode_h265:
-        transcode_codecs = "h264,mpeg4,mpeg2video"
-    elif settings.transcode_to_h265:
+    if settings.force_video_codec:
+        transcode_codecs = settings.force_video_codec
+    elif settings.allow_transcode_to_h265 and not settings.transcode_hevc:
+        transcode_codecs = "h264,h265,hevc,mpeg4,mpeg2video"
+    elif settings.prefer_transcode_to_h265 and not settings.transcode_hevc:
         transcode_codecs = "h265,hevc,h264,mpeg4,mpeg2video"
     else:
-        transcode_codecs = "h264,h265,hevc,mpeg4,mpeg2video"
+        transcode_codecs = "h264,mpeg4,mpeg2video"
+
+    if settings.force_audio_codec:
+        audio_transcode_codecs = settings.force_audio_codec
+    else:
+        audio_transcode_codecs = "aac,mp3,ac3,opus,flac,vorbis"
 
     profile = {
         "Name": USER_APP_NAME,
         "MaxStreamingBitrate": video_bitrate * 1000,
+        "MaxStaticBitrate": video_bitrate * 1000,
         "MusicStreamingTranscodingBitrate": 1280000,
         "TimelineOffsetSeconds": 5,
         "TranscodingProfiles": [
@@ -127,7 +135,7 @@ def get_profile(
                 "Container": "ts",
                 "Type": "Video",
                 "Protocol": "hls",
-                "AudioCodec": "aac,mp3,ac3,opus,flac,vorbis",
+                "AudioCodec": audio_transcode_codecs,
                 "VideoCodec": transcode_codecs,
                 "MaxAudioChannels": "6",
             },
@@ -155,6 +163,7 @@ def get_profile(
             #    "Method": "External"
             # },
             {"Format": "dvdsub", "Method": "Embed"},
+            {"Format": "dvbsub", "Method": "Embed"},
             # {
             #    "Format": "dvdsub",
             #    "Method": "External"
@@ -171,13 +180,102 @@ def get_profile(
         profile["CodecProfiles"].append(
             {
                 "Type": "Video",
-                "codec": "h264",
                 "Conditions": [
                     {
                         "Condition": "LessThanEqual",
                         "Property": "VideoBitDepth",
                         "Value": "8",
                     }
+                ],
+            }
+        )
+
+    if settings.transcode_dolby_vision:
+        profile["CodecProfiles"].append(
+            {
+                "Type": "Video",
+                "Conditions": [
+                    {
+                        "Condition": "NotEquals",
+                        "Property": "VideoRangeType",
+                        "Value": "DOVI",
+                    }
+                ],
+            }
+        )
+
+    if settings.transcode_hdr:
+        profile["CodecProfiles"].append(
+            {
+                "Type": "Video",
+                "Conditions": [
+                    {
+                        "Condition": "Equals",
+                        "Property": "VideoRangeType",
+                        "Value": "SDR",
+                    }
+                ],
+            }
+        )
+
+    if settings.transcode_hevc:
+        profile["CodecProfiles"].append(
+            {
+                "Type": "Video",
+                "Codec": "hevc",
+                "Conditions": [
+                    {
+                        "Condition": "Equals",
+                        "Property": "Width",
+                        "Value": "0",
+                    }
+                ],
+            }
+        )
+        profile["CodecProfiles"].append(
+            {
+                "Type": "Video",
+                "Codec": "h265",
+                "Conditions": [
+                    {
+                        "Condition": "Equals",
+                        "Property": "Width",
+                        "Value": "0",
+                    }
+                ],
+            }
+        )
+
+    if settings.transcode_av1:
+        profile["CodecProfiles"].append(
+            {
+                "Type": "Video",
+                "Codec": "av1",
+                "Conditions": [
+                    {
+                        "Condition": "Equals",
+                        "Property": "Width",
+                        "Value": "0",
+                    }
+                ],
+            }
+        )
+
+    if settings.transcode_4k:
+        profile["CodecProfiles"].append(
+            {
+                "Type": "Video",
+                "Conditions": [
+                    {
+                        "Condition": "LessThanEqual",
+                        "Property": "Width",
+                        "Value": "1920",
+                    },
+                    {
+                        "Condition": "LessThanEqual",
+                        "Property": "Height",
+                        "Value": "1080",
+                    },
                 ],
             }
         )

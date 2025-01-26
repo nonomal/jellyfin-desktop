@@ -3,6 +3,7 @@ import urllib.parse
 import os.path
 import re
 import pathlib
+from io import BytesIO
 from sys import platform
 
 from .conf import settings
@@ -11,10 +12,19 @@ from .i18n import _
 
 log = logging.getLogger("media")
 
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Optional, List
 
 if TYPE_CHECKING:
     from jellyfin_apiclient_python import JellyfinClient as JellyfinClient_type
+
+
+class Intro(object):
+    def __init__(self, type, start, end, ui_start):
+        self.type: str = type  # "Credits" or "Introduction"
+        self.start: float = start
+        self.end: float = end
+        self.ui_start: float = ui_start
+        self.has_triggered: bool = False
 
 
 class Video(object):
@@ -46,6 +56,8 @@ class Video(object):
         self.playback_info = None
         self.media_source = None
         self.srcid = srcid
+        self.intros: List[Intro] = []
+        self.intro_tried = False
 
     def map_streams(self):
         self.subtitle_seq = {}
@@ -147,9 +159,12 @@ class Video(object):
 
     def terminate_transcode(self):
         if self.is_transcode:
-            self.client.jellyfin.close_transcode(
-                self.client.config.data["app.device_id"]
-            )
+            try:
+                self.client.jellyfin.close_transcode(
+                    self.client.config.data["app.device_id"]
+                )
+            except:
+                log.warning("Terminating transcode failed.", exc_info=1)
 
     def _get_url_from_source(self):
         # Only use Direct Paths if:
@@ -165,7 +180,6 @@ class Video(object):
             and settings.direct_paths
             and (settings.remote_direct_paths or self.parent.is_local)
         ):
-
             if platform.startswith("win32") or platform.startswith("cygwin"):
                 # matches on SMB scheme
                 match = re.search("(?:\\\\).+:.*@(.+)", self.media_source["Path"])
@@ -182,7 +196,7 @@ class Video(object):
                 # translate path for windows
                 # if path is smb path in credential format for kodi and maybe linux \\username:password@mediaserver\foo,
                 # translate it to mediaserver/foo
-                return pathlib.Path(self.media_source["Path"])
+                return str(pathlib.Path(self.media_source["Path"]))
             else:
                 # If there's no uri scheme, check if the file exixsts because it might not be mounted
                 if os.path.isfile(self.media_source["Path"]):
@@ -193,11 +207,21 @@ class Video(object):
         if self.media_source["SupportsDirectStream"]:
             self.is_transcode = False
             log.debug("Using direct url.")
-            return "%s/Videos/%s/stream?static=true&MediaSourceId=%s&api_key=%s" % (
+            query_params = {
+                "static": "true",
+                "MediaSourceId": self.media_source["Id"],
+                "api_key": self.client.config.data["auth.token"],
+            }
+
+            if "LiveStreamId" in self.media_source:
+                query_params["LiveStreamId"] = self.media_source["LiveStreamId"]
+
+            query = urllib.parse.urlencode(query_params)
+
+            return "%s/Videos/%s/stream?%s" % (
                 self.client.config.data["auth.server"],
                 self.item_id,
-                self.media_source["Id"],
-                self.client.config.data["auth.token"],
+                query,
             )
         elif self.media_source["SupportsTranscoding"]:
             log.debug("Using transcode url.")
@@ -227,6 +251,84 @@ class Video(object):
                 log.warning("Preferred media source is unplayable.")
             return selected
 
+    def get_intro(self, media_source_id):
+        if self.intro_tried:
+            return
+        self.intro_tried = True
+
+        # provided by plugin
+        try:
+            skip_intro_data = self.client.jellyfin._get(
+                f"Episode/{media_source_id}/IntroSkipperSegments"
+            )
+            for type, intro in skip_intro_data.items():
+                if intro["Valid"]:
+                    self.intros.append(
+                        Intro(
+                            type,
+                            intro["IntroStart"],
+                            intro["IntroEnd"],
+                            intro["ShowSkipPromptAt"],
+                        )
+                    )
+        except:
+            log.warning(
+                "Fetching intro data failed. Do you have the plugin installed?",
+                exc_info=1,
+            )
+
+    def get_current_intro(self, time):
+        for intro in self.intros:
+            if (intro.ui_start <= time or intro.start <= time) and time <= intro.end:
+                return intro.start <= time, intro
+        return False, None
+
+    def get_chapters(self):
+        return [
+            {"start": item["StartPositionTicks"] / 10000000, "name": item["Name"]}
+            for item in self.item.get("Chapters", [])
+            if item.get("ImageTag")
+        ]
+
+    def get_chapter_images(self, max_width=400, quality=90):
+        for i, item in enumerate(self.item.get("Chapters", [])):
+            data = BytesIO()
+            self.client.jellyfin._get_stream(
+                f"Items/{self.item_id}/Images/Chapter/{i}",
+                data,
+                {"tag": item["ImageTag"], "maxWidth": max_width, "quality": quality},
+            )
+            yield data.getvalue()
+
+    def get_hls_tile_images(self, width, count):
+        for i in range(0, count):
+            data = BytesIO()
+            self.client.jellyfin._get_stream(
+                f"Videos/{self.item['Id']}/Trickplay/{width}/{i}.jpg?MediaSourceId={self.media_source['Id']}",
+                data,
+            )
+            yield data.getvalue()
+
+    def get_bif(self, prefer_width=320):
+        manifest = self.item.get("Trickplay")
+        if (
+            manifest is not None
+            and manifest.get(self.media_source["Id"]) is not None
+            and len(manifest[self.media_source["Id"]]) > 0
+        ):
+            available_widths = [
+                int(x) for x in manifest[self.media_source["Id"]].keys()
+            ]
+
+            if prefer_width is not None:
+                width = min(available_widths, key=lambda x: abs(x - prefer_width))
+            else:
+                width = max(available_widths)
+
+            return manifest[self.media_source["Id"]][str(width)]
+        else:
+            return None
+
     def get_playback_url(
         self,
         video_bitrate: Optional[int] = None,
@@ -251,6 +353,14 @@ class Video(object):
         )
 
         self.media_source = self.get_best_media_source(self.srcid)
+        if (
+            settings.skip_intro_always
+            or settings.skip_intro_prompt
+            or settings.skip_credits_always
+            or settings.skip_credits_prompt
+        ):
+            self.get_intro(self.media_source["Id"])
+
         self.map_streams()
         url = self._get_url_from_source()
 
@@ -379,7 +489,7 @@ class Media(object):
 
     def replace_queue(self, sp_items, seq):
         """Update queue for SyncPlay.
-           Returns None if the video is the same or a new Media if not."""
+        Returns None if the video is the same or a new Media if not."""
         if self.queue[self.seq]["Id"] == sp_items[seq]["Id"]:
             self.queue, self.seq = sp_items, seq
             return None

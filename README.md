@@ -89,7 +89,7 @@ The menu enables you to:
 On your computer, use the mouse or arrow keys, enter, and escape to navigate.
 On your phone, use the arrow buttons, ok, back, and home to navigate.
 
-### Shader Packs 
+### Shader Packs
 
 Shader packs are a recent feature addition that allows you to easily use advanced video
 shaders and video quality settings. These usually require a lot of configuration to use,
@@ -171,14 +171,32 @@ You can adjust the basic transcoder settings via the menu.
     - Please note that Jellyfin may still direct play files that meet the transcode profile
       requirements. There is nothing I can do on my end to disable this, but you can reduce
       the bandwidth setting to force a transcode.
-- `transcode_h265` - Force transcode HEVC videos to h264. Default: `false`
+- `transcode_hdr` - Force transcode HDR videos to SDR. Default: `false`
+- `transcode_dolby_vision` - Force transcode Dolby Vision videos to SDR. Default: `true`
+    - If your computer can handle it, you can get tone mapping to work for this using `vo=gpu-next`.
+    - Note that `vo=gpu-next` is considered experimental by MPV at this time.
 - `transcode_hi10p` - Force transcode 10 bit color videos to 8 bit color. Default: `false`
+- `transcode_hevc` - Force transcode HEVC videos. Default: `false`
+- `transcode_av1` - Force transcode AV1 videos. Default: `false`
+- `transcode_4k` - Force transcode videos over 1080p. Default: `false`
 - `remote_kbps` - Bandwidth to permit for remote streaming. Default: `10000`
 - `local_kbps` - Bandwidth to permit for local streaming. Default: `2147483`
 - `direct_paths` - Play media files directly from the SMB or NFS source. Default: `false`
     - `remote_direct_paths` - Apply this even when the server is detected as remote. Default: `false`
-- `transcode_to_h265` - Allow the server to transcode media *to* `hevc`. Default: `false`
+    - Note that `Shared network folder` support was deprecated in Jellyfin 10.9, and is no longer exposed in the Jellyfin UI.
+- `allow_transcode_to_h265` - Allow the server to transcode media *to* `hevc`. Default: `false`
+    - If you enable this, it'll allow remuxing to HEVC but it'll also break force transcoding of Dolby Vision and HDR content if those settings are used. (See [this bug](https://github.com/jellyfin/jellyfin/issues/9313).)
+- `prefer_transcode_to_h265` - Requests the server to transcode media *to* `hevc` as the default. Default: `false`
 - `transcode_warning` - Display a warning the first time media transcodes in a session. Default: `true`
+- `force_video_codec` - Force a specified video codec to be played. Default: `null`
+    - This can be used in tandem with `always_transcode` to force the client to transcode into
+      the specified format.
+    - This may have the same limitations as `always_transcode`.
+    - This will override `transcode_to_h265`, `transcode_h265` and `transcode_hi10p`.
+- `force_audio_codec` - Force a specified audio codec to be played. Default: `null`
+    - This can be used in tandeom with `always_transcode` to force the client to transcode into
+      the specified format.
+    - This may have the same limitations as `always_transcode`.
 
 ### Features
 
@@ -196,7 +214,7 @@ You can use the config file to enable and disable features.
     - This requests the GitHub releases page and checks for a new version.
     - Update checks are performed when playing media, once per day.
  - `notify_updates` - Display update notification when playing media. Default: `true`
-    - Notification will only display once until the application is restarted. 
+    - Notification will only display once until the application is restarted.
  - `discord_presence` - Enable Discord rich presence support. Default: `false`
  - `menu_mouse` - Enable mouse support in the menu. Default: `true`
      - This requires MPV to be compiled with lua support.
@@ -211,6 +229,8 @@ You can execute shell commands on media state using the config file:
  - `idle_cmd` - After no activity for `idle_cmd_delay` seconds.
  - `idle_when_paused` - Consider the player idle when paused. Default: `false`
  - `stop_idle` - Stop the player when idle. (Requires `idle_when_paused`.) Default: `false`
+ - `play_cmd` - After playback starts.
+ - `idle_ended_cmd` - After player stops being idle.
 
 ### Subtitle Visual Settings
 
@@ -227,7 +247,8 @@ The client now supports using an external copy of MPV, including one that is run
 the client. This may be useful if your distribution only provides MPV as a binary executable (instead
 of as a shared library), or to connect to MPV-based GUI players. Please note that SMPlayer exhibits
 strange behaviour when controlled in this manner. External MPV is currently the only working backend
-for media playback on macOS.
+for media playback on macOS. Additionally, due to Flatpak sandbox restrictions, external mpv is not
+practical to use in most cases for the Flatpak version.
 
 - `mpv_ext` - Enable usage of the external player by default. Default: `false`
     - The external player may still be used by default if `libmpv1` is not available.
@@ -289,6 +310,19 @@ use `shader_pack_custom`.
  - `shader_pack_remember` - Automatically remember the last used shader profile. (Default: `true`)
  - `shader_pack_profile` - The default profile to use. (Default: `null`)
     - If you use `shader_pack_remember`, this will be updated when you set a profile through the UI.
+ - `shader_pack_subtype` - The profile group to use. The default pack contains `lq` and `hq` groups. Use `hq` if you have a fancy graphics card.
+
+### Trickplay Thumbnails
+
+MPV will automatically display thumbnail previews. By default it uses the Trickplay images and falls back to chapter images. Please note that this feature will download and
+uncompress all of the chapter images before it becomes available for a video. For a 4 hour movie this
+causes disk usage of about 250 MB, but for the average TV episode it is around 40 MB. It also requires
+overriding the default MPV OSC, which may conflict with some custom user script. Trickplay is compatible
+with any OSC that uses [thumbfast](https://github.com/po5/thumbfast), as I have added a [compatibility layer](https://github.com/jellyfin/jellyfin-mpv-shim/blob/master/jellyfin_mpv_shim/thumbfast.lua).
+
+ - `thumbnail_enable` - Enable thumbnail feature. (Default: `true`)
+ - `thumbnail_osc_builtin` - Disable this setting if you want to use your own custom osc but leave trickplay enabled. (Default: `true`)
+ - `thumbnail_preferred_size` - The ideal size for thumbnails. (Default: `320`)
 
 ### SVP Integration
 
@@ -359,6 +393,19 @@ Other miscellaneous configuration options. You probably won't have to change the
  - `lang_filter_audio` - Apply the language filter to audio selection. Default: `False`
  - `screenshot_dir` - Sets where screenshots go.
     - Default is the desktop on Windows and unset (current directory) on other platforms.
+ - `force_set_played` - This forcibly sets items as played when MPV playback finished.
+    - If you have files with malformed timestamps that don't get marked as played, enable this.
+ - `raise_mpv` - Windows only. Disable this if you are fine with MPV sometimes appearing behind other windows when playing.
+ - `health_check_interval` - The number of seconds between each client health check. Null disables it. Default: `300`
+
+### Skip Intro Support
+
+This functionality is considered experimental and requires the third-party [SkipIntro server plugin](https://github.com/jumoog/intro-skipper). It works the same ways as it did on MPV Shim for Plex.
+
+ - `skip_intro_always` - Always skip intros, without asking. Default: `false`
+ - `skip_intro_prompt` - Prompt to skip intro via seeking. Default: `false`
+ - `skip_credits_always` - Always skip credits, without asking. Default: `false`
+ - `skip_credits_prompt` - Prompt to skip credits via seeking. Default: `false`
 
 ### MPV Configuration
 
@@ -400,16 +447,16 @@ Run `xrandr`. It should look something like this:
 Screen 0: minimum 8 x 8, current 3520 x 1080, maximum 16384 x 16384
 VGA-0 connected 1920x1080+0+0 (normal left inverted right x axis y axis) 521mm x 293mm
    1920x1080     60.00*+
-   1680x1050     59.95  
-   1440x900      59.89  
-   1280x1024     75.02    60.02  
-   1280x960      60.00  
-   1280x800      59.81  
-   1280x720      60.00  
-   1152x864      75.00  
-   1024x768      75.03    70.07    60.00  
-   800x600       75.00    72.19    60.32    56.25  
-   640x480       75.00    59.94  
+   1680x1050     59.95
+   1440x900      59.89
+   1280x1024     75.02    60.02
+   1280x960      60.00
+   1280x800      59.81
+   1280x720      60.00
+   1152x864      75.00
+   1024x768      75.03    70.07    60.00
+   800x600       75.00    72.19    60.32    56.25
+   640x480       75.00    59.94
 LVDS-0 connected 1600x900+1920+180 (normal left inverted right x axis y axis) 309mm x 174mm
    1600x900      59.98*+
 ```
@@ -438,8 +485,8 @@ Set `mpv_ext` to `true` in the config. Add `script=/path/to/mpris.so` to `mpv.co
 
 ### Run Multiple Instances (#45)
 
-You can pass `--config /path/to/folder` to run another copy of the player. Please 
-note that running multiple copies of the desktop client is currently not supported. 
+You can pass `--config /path/to/folder` to run another copy of the player. Please
+note that running multiple copies of the desktop client is currently not supported.
 
 ### Audio Passthrough
 
@@ -490,7 +537,7 @@ On Linux, the process is similar, except that you don't need to set the `mpv_ext
 On macOS, external MPV is already the default and is the only supported player mode.
 
 In the long term, I may look into a method of terminating MPV when not in use. This will require
-a lot of changes to the software. 
+a lot of changes to the software.
 
 ### Player Sizing (#91)
 
@@ -529,8 +576,9 @@ The shaders included in the shader pack are also available under verious open so
 
 If you are on Windows there are additional dependencies. Please see the Windows Build Instructions.
 
-1. Install the dependencies: `sudo pip3 install --upgrade python-mpv jellyfin-apiclient-python pystray Jinja2 pywebview python-mpv-jsonipc pypresence`.
+1. Install the dependencies: `pip3 install --upgrade python-mpv jellyfin-apiclient-python pystray Jinja2 pywebview python-mpv-jsonipc pypresence`.
     - If you run `./gen_pkg.sh --install`, it will also fetch these for you.
+    - Note: Recent distributions make pip unusable by default. Consider using conda or add a virtualenv to your user's path.
 2. Clone this repository: `git clone https://github.com/jellyfin/jellyfin-mpv-shim`
     - You can also download a zip build.
 3. `cd` to the repository: `cd jellyfin-mpv-shim`
@@ -629,7 +677,7 @@ You may also need to edit the batch file for 32 bit builds to point to the right
 3. After installing python3, open `cmd` as admin and run `pip install --upgrade pyinstaller python-mpv jellyfin-apiclient-python pywin32 pystray Jinja2 pywebview python-mpv-jsonipc pypresence`.
     - Details: https://github.com/pyinstaller/pyinstaller/issues/4346
 4. Download [libmpv](https://sourceforge.net/projects/mpv-player-windows/files/libmpv/).
-5. Extract the `mpv-1.dll` from the file and move it to the `jellyfin-mpv-shim` folder.
+5. Extract the `mpv-2.dll` from the file and move it to the `jellyfin-mpv-shim` folder.
 6. Open a regular `cmd` prompt. Navigate to the `jellyfin-mpv-shim` folder.
 7. Run `get_pywebview_natives.py`.
 8. Run `./gen_pkg.sh --skip-build` using the Git for Windows console.

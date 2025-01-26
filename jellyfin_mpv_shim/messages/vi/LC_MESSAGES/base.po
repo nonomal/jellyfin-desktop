@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-03-18 01:38+EDT\n"
-"PO-Revision-Date: 2021-12-17 06:05+0000\n"
+"POT-Creation-Date: 2024-06-05 13:53-0400\n"
+"PO-Revision-Date: 2024-11-17 23:00+0000\n"
 "Last-Translator: hoanghuy309 <hoanghuy309@gmail.com>\n"
 "Language-Team: Vietnamese <https://translate.jellyfin.org/projects/jellyfin/"
 "jellyfin-desktop/vi/>\n"
@@ -15,12 +15,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.5.2\n"
+"X-Generator: Weblate 5.7.2\n"
 "Generated-By: pygettext.py 1.5\n"
 
 #: jellyfin_mpv_shim/bulk_subtitle.py:29
 msgid "Selecting Tracks..."
-msgstr ""
+msgstr "Chọn Tracks..."
 
 #: jellyfin_mpv_shim/bulk_subtitle.py:105
 msgid "{0}: No Subtitles"
@@ -32,11 +32,11 @@ msgstr "{0}: Không thành công"
 
 #: jellyfin_mpv_shim/bulk_subtitle.py:146
 msgid "Set Subbed: {0} ok, {1} fail"
-msgstr ""
+msgstr "Đặt phụ đề: {0} Thành công, {1} Thất bại"
 
 #: jellyfin_mpv_shim/bulk_subtitle.py:151
 msgid "Set Dubbed: {0} ok, {1} audio only, {2} fail"
-msgstr ""
+msgstr "Thiết lập Lồng tiếng: {0} Thành công, {1} Chỉ có tiếng, {2} Thất bại"
 
 #: jellyfin_mpv_shim/bulk_subtitle.py:158
 msgid "Manual: {0} ok, {1} fail"
@@ -46,27 +46,27 @@ msgstr "Thủ công: {0} đồng ý, {1} thất bại"
 msgid "Setting Current..."
 msgstr "Cài đặt hiện tại..."
 
-#: jellyfin_mpv_shim/clients.py:49
+#: jellyfin_mpv_shim/clients.py:75
 msgid "Server URL: "
 msgstr "URL máy chủ: "
 
-#: jellyfin_mpv_shim/clients.py:50
+#: jellyfin_mpv_shim/clients.py:76
 msgid "Username: "
 msgstr "Tên đăng nhập: "
 
-#: jellyfin_mpv_shim/clients.py:51
+#: jellyfin_mpv_shim/clients.py:77
 msgid "Password: "
 msgstr "Mật khẩu: "
 
-#: jellyfin_mpv_shim/clients.py:56
+#: jellyfin_mpv_shim/clients.py:82
 msgid "Successfully added server."
 msgstr "Đã thêm máy chủ thành công."
 
-#: jellyfin_mpv_shim/clients.py:57
+#: jellyfin_mpv_shim/clients.py:83
 msgid "Add another server?"
 msgstr "Thêm máy chủ khác?"
 
-#: jellyfin_mpv_shim/clients.py:60
+#: jellyfin_mpv_shim/clients.py:86
 msgid "Adding server failed."
 msgstr "Thêm máy chủ không thành công."
 
@@ -78,15 +78,15 @@ msgstr "Sẵn sàng truyền"
 msgid "Select your media in Jellyfin and play it here"
 msgstr "Chọn phương tiện của bạn trong Jellyfin và phát nó ở đây"
 
-#: jellyfin_mpv_shim/gui_mgr.py:155
+#: jellyfin_mpv_shim/gui_mgr.py:153
 msgid "Application Log"
 msgstr "Nhật ký ứng dụng"
 
-#: jellyfin_mpv_shim/gui_mgr.py:247 jellyfin_mpv_shim/gui_mgr.py:337
+#: jellyfin_mpv_shim/gui_mgr.py:245 jellyfin_mpv_shim/gui_mgr.py:335
 msgid "Add Server"
 msgstr "Thêm máy chủ"
 
-#: jellyfin_mpv_shim/gui_mgr.py:248
+#: jellyfin_mpv_shim/gui_mgr.py:246
 msgid ""
 "Could not add server.\n"
 "Please check your connection information."
@@ -94,59 +94,59 @@ msgstr ""
 "Không thể thêm máy chủ.\n"
 "Vui lòng kiểm tra thông tin kết nối của bạn."
 
-#: jellyfin_mpv_shim/gui_mgr.py:269
+#: jellyfin_mpv_shim/gui_mgr.py:267
 msgid "Fail"
 msgstr "Thất bại"
 
-#: jellyfin_mpv_shim/gui_mgr.py:269
+#: jellyfin_mpv_shim/gui_mgr.py:267
 msgid "Ok"
 msgstr "Đồng ý"
 
-#: jellyfin_mpv_shim/gui_mgr.py:282
+#: jellyfin_mpv_shim/gui_mgr.py:280
 msgid "Server Configuration"
 msgstr "Cấu hình máy chủ"
 
-#: jellyfin_mpv_shim/gui_mgr.py:305
+#: jellyfin_mpv_shim/gui_mgr.py:303
 msgid "Server:"
 msgstr "Máy chủ:"
 
-#: jellyfin_mpv_shim/gui_mgr.py:310
+#: jellyfin_mpv_shim/gui_mgr.py:308
 msgid "Username:"
 msgstr "Tên đăng nhập:"
 
-#: jellyfin_mpv_shim/gui_mgr.py:315
+#: jellyfin_mpv_shim/gui_mgr.py:313
 msgid "Password:"
 msgstr "Mật khẩu:"
 
-#: jellyfin_mpv_shim/gui_mgr.py:340
+#: jellyfin_mpv_shim/gui_mgr.py:338
 msgid "Remove Server"
 msgstr "Xóa máy chủ"
 
-#: jellyfin_mpv_shim/gui_mgr.py:343
+#: jellyfin_mpv_shim/gui_mgr.py:341
 msgid "Close"
 msgstr "Đóng"
 
-#: jellyfin_mpv_shim/gui_mgr.py:456
+#: jellyfin_mpv_shim/gui_mgr.py:454
 msgid "Configure Servers"
 msgstr "Cấu hình máy chủ"
 
-#: jellyfin_mpv_shim/gui_mgr.py:457
+#: jellyfin_mpv_shim/gui_mgr.py:455
 msgid "Show Console"
 msgstr "Hiển thị bảng điều khiển"
 
-#: jellyfin_mpv_shim/gui_mgr.py:458
+#: jellyfin_mpv_shim/gui_mgr.py:456
 msgid "Application Menu"
 msgstr "Menu ứng dụng"
 
-#: jellyfin_mpv_shim/gui_mgr.py:459
+#: jellyfin_mpv_shim/gui_mgr.py:457
 msgid "Open Config Folder"
 msgstr "Mở thư mục cấu hình"
 
-#: jellyfin_mpv_shim/gui_mgr.py:460
+#: jellyfin_mpv_shim/gui_mgr.py:458
 msgid "Quit"
 msgstr "Thoát"
 
-#: jellyfin_mpv_shim/media.py:126
+#: jellyfin_mpv_shim/media.py:139
 msgid " (Transcode)"
 msgstr " (Chuyển mã)"
 
@@ -222,7 +222,7 @@ msgstr "Thay đổi phụ đề"
 msgid "Change Video Quality"
 msgstr "Thay đổi chất lượng video"
 
-#: jellyfin_mpv_shim/menu.py:139 jellyfin_mpv_shim/syncplay.py:627
+#: jellyfin_mpv_shim/menu.py:139 jellyfin_mpv_shim/syncplay.py:634
 msgid "SyncPlay"
 msgstr "Đồng bộ phát"
 
@@ -254,11 +254,11 @@ msgstr "Cấu hình phát lại video"
 msgid "SVP Settings"
 msgstr "Cài đặt SVP"
 
-#: jellyfin_mpv_shim/menu.py:177 jellyfin_mpv_shim/menu.py:485
+#: jellyfin_mpv_shim/menu.py:177 jellyfin_mpv_shim/menu.py:521
 msgid "Video Preferences"
 msgstr "Tùy chọn video"
 
-#: jellyfin_mpv_shim/menu.py:178 jellyfin_mpv_shim/menu.py:519
+#: jellyfin_mpv_shim/menu.py:178 jellyfin_mpv_shim/menu.py:544
 msgid "Player Preferences"
 msgstr "Tùy chọn trình phát"
 
@@ -334,75 +334,115 @@ msgstr "Ở Trên"
 msgid "Middle"
 msgstr "Ở Giữa"
 
-#: jellyfin_mpv_shim/menu.py:488
+#: jellyfin_mpv_shim/menu.py:486
 msgid "Remote Transcode Quality: {0:0.1f} Mbps"
 msgstr "Chất Lượng Chuyển Mã Từ Xa: {0:0.1f} Mb/s"
 
-#: jellyfin_mpv_shim/menu.py:494
+#: jellyfin_mpv_shim/menu.py:492
 msgid "Subtitle Size: {0}"
 msgstr "Kích cỡ Phụ đề: {0}"
 
-#: jellyfin_mpv_shim/menu.py:498
+#: jellyfin_mpv_shim/menu.py:496
 msgid "Subtitle Position: {0}"
 msgstr "Vị trí Phụ đề: {0}"
 
-#: jellyfin_mpv_shim/menu.py:502
+#: jellyfin_mpv_shim/menu.py:500
 msgid "Subtitle Color: {0}"
 msgstr "Màu Phụ Đề: {0}"
 
-#: jellyfin_mpv_shim/menu.py:507
-msgid "Transcode H265 to H264"
-msgstr "Chuyển mã H265 sang H264"
-
-#: jellyfin_mpv_shim/menu.py:509
+#: jellyfin_mpv_shim/menu.py:505
 msgid "Transcode Hi10p to 8bit"
 msgstr "Chuyển mã Hi10p sang 8bit"
 
-#: jellyfin_mpv_shim/menu.py:511
+#: jellyfin_mpv_shim/menu.py:506
+msgid "Transcode HDR"
+msgstr "Chuyển mã HDR"
+
+#: jellyfin_mpv_shim/menu.py:507
 msgid "Direct Paths"
 msgstr "Đường Dẫn Trực Tiếp"
 
-#: jellyfin_mpv_shim/menu.py:512
-msgid "Transcode to H265"
-msgstr "Chuyển mã sang H265"
-
-#: jellyfin_mpv_shim/menu.py:513
+#: jellyfin_mpv_shim/menu.py:508
 msgid "Disable Direct Play"
 msgstr "Tắt tính năng Phát Trực Tiếp"
 
-#: jellyfin_mpv_shim/menu.py:521
+#: jellyfin_mpv_shim/menu.py:514
+msgid "Video Profile Subtype: {0}"
+msgstr "Loại phụ hồ sơ video: {0}"
+
+#: jellyfin_mpv_shim/menu.py:525
+msgid "Video Profile Subtype"
+msgstr "Loại phụ hồ sơ video"
+
+#: jellyfin_mpv_shim/menu.py:546
 msgid "Auto Play"
 msgstr "Tự Động Phát"
 
-#: jellyfin_mpv_shim/menu.py:522
+#: jellyfin_mpv_shim/menu.py:547
 msgid "Auto Fullscreen"
 msgstr "Tự Động Toàn Màn Hình"
 
-#: jellyfin_mpv_shim/menu.py:523
+#: jellyfin_mpv_shim/menu.py:548
 msgid "Media Key Seek"
-msgstr ""
+msgstr "Phím đi tới"
 
-#: jellyfin_mpv_shim/menu.py:524
+#: jellyfin_mpv_shim/menu.py:549
 msgid "Use Web Seek Pref"
-msgstr ""
+msgstr "Ưu tiên tìm kiếm trên web"
 
-#: jellyfin_mpv_shim/menu.py:525
+#: jellyfin_mpv_shim/menu.py:550
 msgid "Display Mirroring"
 msgstr "Phản Chiếu Màn Hình"
 
-#: jellyfin_mpv_shim/menu.py:526
+#: jellyfin_mpv_shim/menu.py:551
 msgid "Write Logs to File"
 msgstr "Ghi Nhật Ký vào Tệp"
 
-#: jellyfin_mpv_shim/menu.py:527
+#: jellyfin_mpv_shim/menu.py:552
 msgid "Check for Updates"
 msgstr "Kiểm Tra Cập Nhật"
 
-#: jellyfin_mpv_shim/menu.py:529
+#: jellyfin_mpv_shim/menu.py:554
 msgid "Discord Rich Presence"
-msgstr ""
+msgstr "Hiển thị lên Discord"
 
-#: jellyfin_mpv_shim/player.py:498
+#: jellyfin_mpv_shim/menu.py:556
+msgid "Always Skip Intros"
+msgstr "Luôn Bỏ Đoạn Giới Thiệu"
+
+#: jellyfin_mpv_shim/menu.py:557
+msgid "Ask to Skip Intros"
+msgstr "Hỏi để bỏ qua đoạn mở đầu"
+
+#: jellyfin_mpv_shim/menu.py:558
+msgid "Always Skip Credits"
+msgstr "Luôn bỏ qua đoạn giới thiệu"
+
+#: jellyfin_mpv_shim/menu.py:559
+msgid "Ask to Skip Credits"
+msgstr "Hỏi để bỏ qua đoạn giới thiệu"
+
+#: jellyfin_mpv_shim/menu.py:561
+msgid "Enable thumbnail previews"
+msgstr "Bật hình nhỏ xem trước"
+
+#: jellyfin_mpv_shim/player.py:487
+msgid "Skipped Credits"
+msgstr "Đã bỏ qua đoạn giới thiệu"
+
+#: jellyfin_mpv_shim/player.py:487
+msgid "Skipped Intro"
+msgstr "Đã bỏ qua đoạn mở đầu"
+
+#: jellyfin_mpv_shim/player.py:490
+msgid "Seek to Skip Credits"
+msgstr "Đi tới để bỏ qua đoạn giới thiệu"
+
+#: jellyfin_mpv_shim/player.py:490
+msgid "Seek to Skip Intro"
+msgstr "Đi tới để bỏ qua đoạn mở đầu"
+
+#: jellyfin_mpv_shim/player.py:598
 msgid ""
 "Your remote video is transcoding!\n"
 "Press c to adjust bandwidth settings if this is not needed."
@@ -410,7 +450,7 @@ msgstr ""
 "Video từ xa của bạn đang chuyển mã!\n"
 "Nhấn c để điều chỉnh cài đặt băng thông nếu không cần thiết."
 
-#: jellyfin_mpv_shim/player.py:849
+#: jellyfin_mpv_shim/player.py:965
 msgid "Season {0} - Episode {1}"
 msgstr "Mùa {0} - Tập {1}"
 
@@ -465,7 +505,7 @@ msgstr "Truy cập vào thư viện SyncPlay đã bị từ chối."
 
 #: jellyfin_mpv_shim/syncplay.py:150
 msgid "SpeedToSync (x{0})"
-msgstr ""
+msgstr "Tốc độ đồng bộ (x{0})"
 
 #: jellyfin_mpv_shim/syncplay.py:161
 msgid "Sync Disabled (Too Many Attempts)"
@@ -473,7 +513,7 @@ msgstr "Đồng Độ Đã Bị Tắt (Quá Nhiều Lần Thử)"
 
 #: jellyfin_mpv_shim/syncplay.py:169
 msgid "SkipToSync (x{0})"
-msgstr ""
+msgstr "Bỏ qua đồng bộ (x{0})"
 
 #: jellyfin_mpv_shim/syncplay.py:230
 msgid "SyncPlay enabled."
@@ -495,15 +535,15 @@ msgstr "{0} đã rời đi."
 msgid "{0} is buffering."
 msgstr "{0} đang lưu vào bộ đệm."
 
-#: jellyfin_mpv_shim/syncplay.py:608
+#: jellyfin_mpv_shim/syncplay.py:615
 msgid "{0}'s Group"
 msgstr "Nhóm của {0}"
 
-#: jellyfin_mpv_shim/syncplay.py:617 jellyfin_mpv_shim/video_profile.py:176
+#: jellyfin_mpv_shim/syncplay.py:624 jellyfin_mpv_shim/video_profile.py:190
 msgid "None (Disabled)"
 msgstr "Không có (Đã tắt)"
 
-#: jellyfin_mpv_shim/syncplay.py:621
+#: jellyfin_mpv_shim/syncplay.py:628
 msgid "New Group"
 msgstr "Nhóm Mới"
 
@@ -515,11 +555,11 @@ msgstr ""
 "Có sẵn bản cập nhật MPV Shim v {0}\n"
 "Mở menu (nhấn c) để biết chi tiết."
 
-#: jellyfin_mpv_shim/utils.py:208
+#: jellyfin_mpv_shim/utils.py:307
 msgid "Unkn"
-msgstr ""
+msgstr "Ko rõ"
 
-#: jellyfin_mpv_shim/utils.py:209
+#: jellyfin_mpv_shim/utils.py:308
 msgid " Forced"
 msgstr " Bắt Buộc"
 
@@ -555,6 +595,12 @@ msgstr "Anime4K x2 Perceptual (Dành cho HD)"
 msgid "Anime4K x2 Perceptual + Deblur (For HD)"
 msgstr "Anime4K x2 Perceptual + Deblur (Dành cho HD)"
 
-#: jellyfin_mpv_shim/video_profile.py:184
+#: jellyfin_mpv_shim/video_profile.py:204
 msgid "Select Shader Profile"
 msgstr "Chọn hồ sơ Shader"
+
+#~ msgid "Use JellyScrub thumbnails"
+#~ msgstr "Dùng hình nhỏ JellyScrub"
+
+#~ msgid "Transcode H265 to H264"
+#~ msgstr "Chuyển mã H265 sang H264"

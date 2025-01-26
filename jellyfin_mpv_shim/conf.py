@@ -33,12 +33,20 @@ class Settings(SettingsBase):
     stop_cmd: Optional[str] = None
     auto_play: bool = True
     idle_cmd: Optional[str] = None
+    idle_ended_cmd: Optional[str] = None
+    play_cmd: Optional[str] = None
     idle_cmd_delay: int = 60
     direct_paths: bool = False
     remote_direct_paths: bool = False
     always_transcode: bool = False
-    transcode_h265: bool = False
     transcode_hi10p: bool = False
+    transcode_hdr: bool = False
+    transcode_hevc: bool = False
+    transcode_av1: bool = False
+    transcode_4k: bool = False
+    transcode_dolby_vision: bool = True
+    allow_transcode_to_h265: bool = False
+    prefer_transcode_to_h265: bool = False
     remote_kbps: int = 10000
     local_kbps: int = 2147483
     subtitle_size: int = 100
@@ -59,7 +67,6 @@ class Settings(SettingsBase):
     mpv_log_level: str = "info"
     idle_when_paused: bool = False
     stop_idle: bool = False
-    transcode_to_h265: bool = False
     kb_stop: str = "q"
     kb_prev: str = "<"
     kb_next: str = ">"
@@ -86,6 +93,7 @@ class Settings(SettingsBase):
     shader_pack_custom: bool = False
     shader_pack_remember: bool = True
     shader_pack_profile: Optional[str] = None
+    shader_pack_subtype: str = "lq"
     svp_enable: bool = False
     svp_url: str = "http://127.0.0.1:9901/"
     svp_socket: Optional[str] = None
@@ -113,7 +121,19 @@ class Settings(SettingsBase):
     lang_filter: str = "und,eng,jpn,mis,mul,zxx"
     lang_filter_sub: bool = False
     lang_filter_audio: bool = False
+    force_set_played: bool = False
     screenshot_dir: Optional[str] = get_default_sdir()
+    raise_mpv: bool = True
+    force_video_codec: Optional[str] = None
+    force_audio_codec: Optional[str] = None
+    health_check_interval: Optional[int] = 300
+    skip_intro_always: bool = False
+    skip_intro_prompt: bool = False
+    skip_credits_always: bool = False
+    skip_credits_prompt: bool = False
+    thumbnail_enable: bool = True
+    thumbnail_osc_builtin: bool = True
+    thumbnail_preferred_size: int = 320
 
     def __get_file(self, path: str, mode: str = "r", create: bool = True):
         created = False

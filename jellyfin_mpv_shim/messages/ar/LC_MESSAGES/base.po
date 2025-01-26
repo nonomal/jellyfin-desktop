@@ -5,9 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-03-18 01:38+EDT\n"
-"PO-Revision-Date: 2021-12-08 13:05+0000\n"
-"Last-Translator: Muhammed Aljailane <darhost56@gmail.com>\n"
+"POT-Creation-Date: 2024-06-05 13:53-0400\n"
+"PO-Revision-Date: 2024-06-26 16:27+0000\n"
+"Last-Translator: Jalal Majed <conany1@gmail.com>\n"
 "Language-Team: Arabic <https://translate.jellyfin.org/projects/jellyfin/"
 "jellyfin-desktop/ar/>\n"
 "Language: ar\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 4.5.2\n"
+"X-Generator: Weblate 5.4.2\n"
 "Generated-By: pygettext.py 1.5\n"
 
 #: jellyfin_mpv_shim/bulk_subtitle.py:29
@@ -41,33 +41,33 @@ msgstr "تجهيز الدبلجة: {0} نجاح, {1} صوت فقط, {2} فشل"
 
 #: jellyfin_mpv_shim/bulk_subtitle.py:158
 msgid "Manual: {0} ok, {1} fail"
-msgstr "يدوي: {0} نجاح, {1}: فش"
+msgstr "يدوي: {0} لا مشكلة، {1}: فشل"
 
 #: jellyfin_mpv_shim/bulk_subtitle.py:163
 msgid "Setting Current..."
 msgstr "جاري اختيار الحالي..."
 
-#: jellyfin_mpv_shim/clients.py:49
+#: jellyfin_mpv_shim/clients.py:75
 msgid "Server URL: "
 msgstr "عنوان الخادم: "
 
-#: jellyfin_mpv_shim/clients.py:50
+#: jellyfin_mpv_shim/clients.py:76
 msgid "Username: "
 msgstr "اسم المستخدم: "
 
-#: jellyfin_mpv_shim/clients.py:51
+#: jellyfin_mpv_shim/clients.py:77
 msgid "Password: "
 msgstr "كلمة السر: "
 
-#: jellyfin_mpv_shim/clients.py:56
+#: jellyfin_mpv_shim/clients.py:82
 msgid "Successfully added server."
 msgstr "نجاح إضافة الخادم."
 
-#: jellyfin_mpv_shim/clients.py:57
+#: jellyfin_mpv_shim/clients.py:83
 msgid "Add another server?"
 msgstr "إضافة خادم آخر؟"
 
-#: jellyfin_mpv_shim/clients.py:60
+#: jellyfin_mpv_shim/clients.py:86
 msgid "Adding server failed."
 msgstr "فشل إضافة الخادم."
 
@@ -79,15 +79,15 @@ msgstr "جاهز للإرسال"
 msgid "Select your media in Jellyfin and play it here"
 msgstr "حدد الوسائط الخاصة بك في Jellyfin وقم بتشغيلها هنا"
 
-#: jellyfin_mpv_shim/gui_mgr.py:155
+#: jellyfin_mpv_shim/gui_mgr.py:153
 msgid "Application Log"
 msgstr "سجل التطبيق"
 
-#: jellyfin_mpv_shim/gui_mgr.py:247 jellyfin_mpv_shim/gui_mgr.py:337
+#: jellyfin_mpv_shim/gui_mgr.py:245 jellyfin_mpv_shim/gui_mgr.py:335
 msgid "Add Server"
 msgstr "أضافة خادم"
 
-#: jellyfin_mpv_shim/gui_mgr.py:248
+#: jellyfin_mpv_shim/gui_mgr.py:246
 msgid ""
 "Could not add server.\n"
 "Please check your connection information."
@@ -95,61 +95,61 @@ msgstr ""
 "تعذرت إضافة الخادم.\n"
 "يرجى التحقق من معلومات الاتصال الخاصة بك."
 
-#: jellyfin_mpv_shim/gui_mgr.py:269
+#: jellyfin_mpv_shim/gui_mgr.py:267
 msgid "Fail"
 msgstr "فشل"
 
-#: jellyfin_mpv_shim/gui_mgr.py:269
+#: jellyfin_mpv_shim/gui_mgr.py:267
 msgid "Ok"
 msgstr "نعم"
 
-#: jellyfin_mpv_shim/gui_mgr.py:282
+#: jellyfin_mpv_shim/gui_mgr.py:280
 msgid "Server Configuration"
 msgstr "إعدادات الخادم"
 
-#: jellyfin_mpv_shim/gui_mgr.py:305
+#: jellyfin_mpv_shim/gui_mgr.py:303
 msgid "Server:"
 msgstr "الخادم:"
 
-#: jellyfin_mpv_shim/gui_mgr.py:310
+#: jellyfin_mpv_shim/gui_mgr.py:308
 msgid "Username:"
 msgstr "اسم المستخدم:"
 
-#: jellyfin_mpv_shim/gui_mgr.py:315
+#: jellyfin_mpv_shim/gui_mgr.py:313
 msgid "Password:"
 msgstr "كلمة السر:"
 
-#: jellyfin_mpv_shim/gui_mgr.py:340
+#: jellyfin_mpv_shim/gui_mgr.py:338
 msgid "Remove Server"
 msgstr "حذف الخادم"
 
-#: jellyfin_mpv_shim/gui_mgr.py:343
+#: jellyfin_mpv_shim/gui_mgr.py:341
 msgid "Close"
 msgstr "غلق"
 
-#: jellyfin_mpv_shim/gui_mgr.py:456
+#: jellyfin_mpv_shim/gui_mgr.py:454
 msgid "Configure Servers"
 msgstr "إعدادات الخوادم"
 
-#: jellyfin_mpv_shim/gui_mgr.py:457
+#: jellyfin_mpv_shim/gui_mgr.py:455
 msgid "Show Console"
 msgstr "إظهار وحدة التحكم"
 
-#: jellyfin_mpv_shim/gui_mgr.py:458
+#: jellyfin_mpv_shim/gui_mgr.py:456
 msgid "Application Menu"
 msgstr "قائمة التطبيق"
 
-#: jellyfin_mpv_shim/gui_mgr.py:459
+#: jellyfin_mpv_shim/gui_mgr.py:457
 msgid "Open Config Folder"
 msgstr "فتح مجلد الإعدادات"
 
-#: jellyfin_mpv_shim/gui_mgr.py:460
+#: jellyfin_mpv_shim/gui_mgr.py:458
 msgid "Quit"
 msgstr "غلق"
 
-#: jellyfin_mpv_shim/media.py:126
+#: jellyfin_mpv_shim/media.py:139
 msgid " (Transcode)"
-msgstr " (تحويل)"
+msgstr " (ترميز)"
 
 #: jellyfin_mpv_shim/menu.py:28
 msgid "White"
@@ -165,7 +165,7 @@ msgstr "أسود"
 
 #: jellyfin_mpv_shim/menu.py:31
 msgid "Cyan"
-msgstr "أزرق سماوي"
+msgstr "سماوي"
 
 #: jellyfin_mpv_shim/menu.py:32
 msgid "Blue"
@@ -223,7 +223,7 @@ msgstr "تغيير الترجمة"
 msgid "Change Video Quality"
 msgstr "تغيير جودة الفيديو"
 
-#: jellyfin_mpv_shim/menu.py:139 jellyfin_mpv_shim/syncplay.py:627
+#: jellyfin_mpv_shim/menu.py:139 jellyfin_mpv_shim/syncplay.py:634
 msgid "SyncPlay"
 msgstr "مشاهدة معا"
 
@@ -241,7 +241,7 @@ msgstr "اختيار اوتوماتيكي الصوت/ترجمة(جميع الم�
 
 #: jellyfin_mpv_shim/menu.py:163
 msgid "Quit and Mark Unwatched"
-msgstr "الخروج وتسجيل أنه لم يتم مشاهدته"
+msgstr "أخرج وعينه كـ(لم يتم مشاهدته)"
 
 #: jellyfin_mpv_shim/menu.py:166
 msgid "Screenshot"
@@ -255,11 +255,11 @@ msgstr "أوضاع تشغيل الفيديو"
 msgid "SVP Settings"
 msgstr "إعدادات SVP"
 
-#: jellyfin_mpv_shim/menu.py:177 jellyfin_mpv_shim/menu.py:485
+#: jellyfin_mpv_shim/menu.py:177 jellyfin_mpv_shim/menu.py:521
 msgid "Video Preferences"
 msgstr "خصائص الفيديو"
 
-#: jellyfin_mpv_shim/menu.py:178 jellyfin_mpv_shim/menu.py:519
+#: jellyfin_mpv_shim/menu.py:178 jellyfin_mpv_shim/menu.py:544
 msgid "Player Preferences"
 msgstr "خصائص المشغل"
 
@@ -281,15 +281,15 @@ msgstr "لا شيء"
 
 #: jellyfin_mpv_shim/menu.py:345
 msgid "Select Transcode Quality"
-msgstr "تحديد جودة التحويل"
+msgstr "تحديد جودة الترميز"
 
 #: jellyfin_mpv_shim/menu.py:346
 msgid "Maximum"
-msgstr "الأقصى درجة"
+msgstr "الحد الأقصى"
 
 #: jellyfin_mpv_shim/menu.py:346 jellyfin_mpv_shim/menu.py:423
 msgid "No Transcode"
-msgstr "بدون تحويل"
+msgstr "دُونَ ترميز"
 
 #: jellyfin_mpv_shim/menu.py:382
 msgid "Select Audio/Subtitle for Series"
@@ -335,83 +335,123 @@ msgstr "الأعلى"
 msgid "Middle"
 msgstr "المنتصف"
 
-#: jellyfin_mpv_shim/menu.py:488
+#: jellyfin_mpv_shim/menu.py:486
 msgid "Remote Transcode Quality: {0:0.1f} Mbps"
-msgstr "جودة التحويل عن بعد: {0:0.1f} ميغا بت في الثانية"
+msgstr "جودة الترميز عن بعد: {0:0.1f} ميغا بت في الثانية"
 
-#: jellyfin_mpv_shim/menu.py:494
+#: jellyfin_mpv_shim/menu.py:492
 msgid "Subtitle Size: {0}"
 msgstr "حجم الترجمة: {0}"
 
-#: jellyfin_mpv_shim/menu.py:498
+#: jellyfin_mpv_shim/menu.py:496
 msgid "Subtitle Position: {0}"
 msgstr "موضع الترجمة: {0}"
 
-#: jellyfin_mpv_shim/menu.py:502
+#: jellyfin_mpv_shim/menu.py:500
 msgid "Subtitle Color: {0}"
 msgstr "لون الترجمة: {0}"
 
-#: jellyfin_mpv_shim/menu.py:507
-msgid "Transcode H265 to H264"
-msgstr "تحويل الصيغة H265 إلى H264"
-
-#: jellyfin_mpv_shim/menu.py:509
+#: jellyfin_mpv_shim/menu.py:505
 msgid "Transcode Hi10p to 8bit"
-msgstr "تحويل الصيغة Hi10p إلى 8bit"
+msgstr "رمز Hi10p إلى 8bit"
 
-#: jellyfin_mpv_shim/menu.py:511
+#: jellyfin_mpv_shim/menu.py:506
+msgid "Transcode HDR"
+msgstr "رمز إلى H265"
+
+#: jellyfin_mpv_shim/menu.py:507
 msgid "Direct Paths"
 msgstr "المسارات المباشرة"
 
-#: jellyfin_mpv_shim/menu.py:512
-msgid "Transcode to H265"
-msgstr "تحويل الصيغة إلى H265"
-
-#: jellyfin_mpv_shim/menu.py:513
+#: jellyfin_mpv_shim/menu.py:508
 msgid "Disable Direct Play"
 msgstr "تعطيل التشغيل المباشر"
 
-#: jellyfin_mpv_shim/menu.py:521
+#: jellyfin_mpv_shim/menu.py:514
+msgid "Video Profile Subtype: {0}"
+msgstr "النوع الفرعي لملف تعريف الفيديو: {0}"
+
+#: jellyfin_mpv_shim/menu.py:525
+msgid "Video Profile Subtype"
+msgstr "النوع الفرعي لملف تعريف الفيديو"
+
+#: jellyfin_mpv_shim/menu.py:546
 msgid "Auto Play"
 msgstr "التشغيل التلقائي"
 
-#: jellyfin_mpv_shim/menu.py:522
+#: jellyfin_mpv_shim/menu.py:547
 msgid "Auto Fullscreen"
-msgstr "تكبير الشاشة تلقائي"
+msgstr "تكبير تلقائي للشاشة"
 
-#: jellyfin_mpv_shim/menu.py:523
+#: jellyfin_mpv_shim/menu.py:548
 msgid "Media Key Seek"
 msgstr "البحث عن مفتاح الوسائط"
 
-#: jellyfin_mpv_shim/menu.py:524
+#: jellyfin_mpv_shim/menu.py:549
 msgid "Use Web Seek Pref"
 msgstr "استخدم Web Seek Pref"
 
-#: jellyfin_mpv_shim/menu.py:525
+#: jellyfin_mpv_shim/menu.py:550
 msgid "Display Mirroring"
 msgstr "انعكاس الشاشة"
 
-#: jellyfin_mpv_shim/menu.py:526
+#: jellyfin_mpv_shim/menu.py:551
 msgid "Write Logs to File"
-msgstr "كتابة التسجيلات في ملف"
+msgstr "اكتب السجلات في ملف"
 
-#: jellyfin_mpv_shim/menu.py:527
+#: jellyfin_mpv_shim/menu.py:552
 msgid "Check for Updates"
 msgstr "التحقق من وجود تحديثات"
 
-#: jellyfin_mpv_shim/menu.py:529
+#: jellyfin_mpv_shim/menu.py:554
 msgid "Discord Rich Presence"
 msgstr "حضور غني على Discord"
 
-#: jellyfin_mpv_shim/player.py:498
+#: jellyfin_mpv_shim/menu.py:556
+msgid "Always Skip Intros"
+msgstr "تخطى المقدمات دائما"
+
+#: jellyfin_mpv_shim/menu.py:557
+msgid "Ask to Skip Intros"
+msgstr "اسأل لتخطي المقدمة"
+
+#: jellyfin_mpv_shim/menu.py:558
+msgid "Always Skip Credits"
+msgstr "تخطى الخاتمة دائما"
+
+#: jellyfin_mpv_shim/menu.py:559
+msgid "Ask to Skip Credits"
+msgstr "اسأل لتخطي الخاتمة"
+
+#: jellyfin_mpv_shim/menu.py:561
+msgid "Enable thumbnail previews"
+msgstr "تمكين الصور المصغرة للمعاينة"
+
+#: jellyfin_mpv_shim/player.py:487
+msgid "Skipped Credits"
+msgstr "تم تخطي الخاتمة"
+
+#: jellyfin_mpv_shim/player.py:487
+msgid "Skipped Intro"
+msgstr "تم تخطي المقدمة"
+
+#: jellyfin_mpv_shim/player.py:490
+msgid "Seek to Skip Credits"
+msgstr "قم بالتنقل لتتخطى الخاتمة"
+
+#: jellyfin_mpv_shim/player.py:490
+msgid "Seek to Skip Intro"
+msgstr "قم بالتنقل لتتخطى المقدمة"
+
+#: jellyfin_mpv_shim/player.py:598
 msgid ""
 "Your remote video is transcoding!\n"
 "Press c to adjust bandwidth settings if this is not needed."
 msgstr ""
-"يتم تحويل الفيديو عن بعد!\n"
-"اذا كان هذا غير لازم اضغط على c لتعديل إعدادات عرض النطاق."
+"عملية ترميز تجري حاليا على فيدو عبر الإنترنت.\n"
+"إن لم تود ذلك، فاضغط على c لتغيير إعدادات سرعة عرض النطاق."
 
-#: jellyfin_mpv_shim/player.py:849
+#: jellyfin_mpv_shim/player.py:965
 msgid "Season {0} - Episode {1}"
 msgstr "الموسم {0} - الحلقة {1}"
 
@@ -450,19 +490,19 @@ msgstr "SVP معطل"
 
 #: jellyfin_mpv_shim/syncplay.py:21
 msgid "The specified SyncPlay group does not exist."
-msgstr "مجموعة SyncPlay المختارة لا توجد."
+msgstr "مجموعة المشاهدة معا المختارة غير متوفرة."
 
 #: jellyfin_mpv_shim/syncplay.py:22
 msgid "Creating SyncPlay groups is not allowed."
-msgstr "إنشاء مجموعات SyncPlay غير مسموح."
+msgstr "غير مسموح لك إنشاء مجموعات المشاهدة معا."
 
 #: jellyfin_mpv_shim/syncplay.py:23
 msgid "SyncPlay group access was denied."
-msgstr "الوصول إلى مجموعة SyncPlay تم رفضه."
+msgstr "رٌفض طلب دخولك إلى المجموعة في المشاهدة معا."
 
 #: jellyfin_mpv_shim/syncplay.py:24
 msgid "Access to the SyncPlay library was denied."
-msgstr "الوصول إلى مكتبة SyncPlay تم رفضه."
+msgstr "رٌفض طلبك بالوصول إلى مكتبة في المشاهدة معا."
 
 #: jellyfin_mpv_shim/syncplay.py:150
 msgid "SpeedToSync (x{0})"
@@ -496,15 +536,15 @@ msgstr "{0} قد غادر."
 msgid "{0} is buffering."
 msgstr "{0} يتم تخزينه مؤقتا."
 
-#: jellyfin_mpv_shim/syncplay.py:608
+#: jellyfin_mpv_shim/syncplay.py:615
 msgid "{0}'s Group"
 msgstr "مجموعة {0}"
 
-#: jellyfin_mpv_shim/syncplay.py:617 jellyfin_mpv_shim/video_profile.py:176
+#: jellyfin_mpv_shim/syncplay.py:624 jellyfin_mpv_shim/video_profile.py:190
 msgid "None (Disabled)"
 msgstr "لا شيء (معطل)"
 
-#: jellyfin_mpv_shim/syncplay.py:621
+#: jellyfin_mpv_shim/syncplay.py:628
 msgid "New Group"
 msgstr "مجموعة جديدة"
 
@@ -516,11 +556,11 @@ msgstr ""
 "MPV Shim v{0} تحديث متوفر\n"
 "افتح القائمة (اضغط على c) لمزيد من المعلومات."
 
-#: jellyfin_mpv_shim/utils.py:208
+#: jellyfin_mpv_shim/utils.py:307
 msgid "Unkn"
 msgstr "غير معروف"
 
-#: jellyfin_mpv_shim/utils.py:209
+#: jellyfin_mpv_shim/utils.py:308
 msgid " Forced"
 msgstr " فرض"
 
@@ -556,6 +596,12 @@ msgstr "Anime4K x2 Perceptual (ل HD)"
 msgid "Anime4K x2 Perceptual + Deblur (For HD)"
 msgstr "Anime4K x2 Perceptual + Deblur (ل HD)"
 
-#: jellyfin_mpv_shim/video_profile.py:184
+#: jellyfin_mpv_shim/video_profile.py:204
 msgid "Select Shader Profile"
 msgstr "تحديد وضع التظليل"
+
+#~ msgid "Use JellyScrub thumbnails"
+#~ msgstr "استخدم الصور المصغرة من JellyScrub"
+
+#~ msgid "Transcode H265 to H264"
+#~ msgstr "رمز H265 إلى H264"

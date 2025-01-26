@@ -22,6 +22,7 @@ class TimelineManager(threading.Thread):
 
     def stop(self):
         self.halt = True
+        self.trigger.set()
         self.join()
 
     def run(self):
@@ -30,6 +31,8 @@ class TimelineManager(threading.Thread):
                 not settings.idle_when_paused or not playerManager.is_paused()
             ):
                 self.send_timeline()
+                if self.is_idle and settings.idle_ended_cmd:
+                    os.system(settings.idle_ended_cmd)
                 self.delay_idle()
             if self.idleTimer.elapsed() > settings.idle_cmd_delay and not self.is_idle:
                 if (

@@ -152,6 +152,8 @@ class PlayerManager(object):
         self.warned_about_transcode = False
         self.fullscreen_disable = False
         self.update_check = UpdateChecker(self)
+        self.is_in_intro = False
+        self.trickplay = None
 
         if is_using_ext_mpv:
             mpv_options.update(
@@ -162,21 +164,51 @@ class PlayerManager(object):
                     "player-operation-mode": "cplayer",
                 }
             )
+
+        scripts = []
         if settings.menu_mouse:
-            if is_using_ext_mpv:
-                mpv_options["script"] = get_resource("mouse.lua")
+            scripts.append(get_resource("mouse.lua"))
+        if settings.thumbnail_enable:
+            try:
+                from .trickplay import TrickPlay
+
+                self.trickplay = TrickPlay(self)
+                self.trickplay.start()
+
+                scripts.append(get_resource("thumbfast.lua"))
+                if settings.thumbnail_osc_builtin:
+                    scripts.append(get_resource("trickplay-osc.lua"))
+
+            except Exception:
+                log.error("Could not enable trickplay.", exc_info=True)
+
+            mpv_options["osc"] = False
+
+        # ensure standard mpv configuration directories and files exist
+        conffile.get_dir(APP_NAME, "scripts")
+        conffile.get_dir(APP_NAME, "fonts")
+        conffile.get(APP_NAME, "input.conf", True)
+        conffile.get(APP_NAME, "mpv.conf", True)
+
+        if scripts:
+            if settings.mpv_ext:
+                mpv_options["script"] = scripts
             else:
-                mpv_options["scripts"] = get_resource("mouse.lua")
+                mpv_options["scripts"] = (
+                    ";" if sys.platform.startswith("win32") else ":"
+                ).join(scripts)
+
         if not (settings.mpv_ext and settings.mpv_ext_no_ovr):
-            mpv_options["include"] = conffile.get(APP_NAME, "mpv.conf", True)
-            mpv_options["input_conf"] = conffile.get(APP_NAME, "input.conf", True)
+            mpv_options["config"] = True
+            mpv_options["config_dir"] = conffile.confdir(APP_NAME)
+
         self._player = mpv.MPV(
             input_default_bindings=True,
             input_vo_keyboard=True,
             input_media_keys=settings.media_keys,
             log_handler=mpv_log_handler,
             loglevel=settings.mpv_log_level,
-            **mpv_options
+            **mpv_options,
         )
         self.menu = OSDMenu(self, self._player)
         self.syncplay = SyncPlayManager(self)
@@ -185,7 +217,7 @@ class PlayerManager(object):
             register_join_event(self.syncplay.discord_join_group)
 
         if hasattr(self._player, "osc"):
-            self._player.osc = settings.enable_osc
+            self.enable_osc(settings.enable_osc)
         else:
             log.warning("This mpv version doesn't support on-screen controller.")
 
@@ -196,6 +228,10 @@ class PlayerManager(object):
                 log.warning(
                     "This mpv version doesn't support setting the screenshot directory."
                 )
+
+        if hasattr(self._player, "resume_playback"):
+            # This can lead to unwanted skipping of videos
+            self._player.resume_playback = False
 
         # Wrapper for on_key_press that ignores None.
         def keypress(key):
@@ -233,8 +269,11 @@ class PlayerManager(object):
         @self._player.on_key_press("XF86_NEXT")
         def handle_media_next():
             if settings.media_key_seek:
-                _x, seektime = self.get_seek_times()
-                self.seek(seektime)
+                if self.is_in_intro:
+                    self.skip_intro()
+                else:
+                    _x, seektime = self.get_seek_times()
+                    self.seek(seektime)
             else:
                 self.put_task(self.play_next)
 
@@ -277,14 +316,20 @@ class PlayerManager(object):
             if self.menu.is_menu_shown:
                 self.menu.menu_action("right")
             else:
-                self.kb_seek("right")
+                if self.is_in_intro:
+                    self.skip_intro()
+                else:
+                    self.kb_seek("right")
 
         @keypress(settings.kb_menu_up)
         def menu_up():
             if self.menu.is_menu_shown:
                 self.menu.menu_action("up")
             else:
-                self.kb_seek("up")
+                if self.is_in_intro:
+                    self.skip_intro()
+                else:
+                    self.kb_seek("up")
 
         @keypress(settings.kb_menu_down)
         def menu_down():
@@ -332,7 +377,7 @@ class PlayerManager(object):
         @self._player.property_observer("playback-abort")
         def handle_end_idle(_name, value: bool):
             self.pause_ignore = True
-            if self._video and value:
+            if self._video and value and not self._video.parent.has_next:
                 has_lock = self._finished_lock.acquire(False)
                 self.put_task(self.finished_callback, has_lock)
 
@@ -376,6 +421,14 @@ class PlayerManager(object):
         @self._player.event_callback("client-message")
         def handle_client_message(event):
             try:
+                # Python-MPV 1.0 uses a class/struct combination now
+                if hasattr(event, "as_dict"):
+                    event = event.as_dict()
+                    if "event" in event:
+                        event["event"] = event["event"].decode("utf-8")
+                    if "args" in event:
+                        event["args"] = [d.decode("utf-8") for d in event["args"]]
+
                 if "event_id" in event:
                     args = event["event"]["args"]
                 else:
@@ -406,8 +459,63 @@ class PlayerManager(object):
         if self.timeline_trigger:
             self.timeline_trigger.set()
 
+    def skip_intro(self):
+        _, intro = self._video.get_current_intro(self._player.playback_time)
+
+        self._player.playback_time = intro.end
+        intro.has_triggered = True
+        self.timeline_handle()
+        self.is_in_intro = False
+
     @synchronous("_lock")
     def update(self):
+        if (
+            (
+                settings.skip_intro_always
+                or settings.skip_intro_prompt
+                or settings.skip_credits_always
+                or settings.skip_credits_prompt
+            )
+            and not self.syncplay.is_enabled()
+            and self._video is not None
+            and self._player.playback_time is not None
+        ):
+            ready_to_skip, intro = self._video.get_current_intro(
+                self._player.playback_time
+            )
+
+            if intro is not None:
+                should_prompt = (
+                    intro.type != "Credits" and settings.skip_intro_prompt
+                ) or (intro.type == "Credits" and settings.skip_credits_prompt)
+                should_skip = (not intro.has_triggered) and (
+                    (intro.type != "Credits" and settings.skip_intro_always)
+                    or (intro.type == "Credits" and settings.skip_credits_always)
+                )
+
+                if should_skip and ready_to_skip:
+                    intro.has_triggered = True
+                    self.skip_intro()
+                    self._player.show_text(
+                        _("Skipped Credits")
+                        if intro.type == "Credits"
+                        else _("Skipped Intro"),
+                        3000,
+                        1,
+                    )
+
+                if not self.is_in_intro and should_prompt:
+                    self._player.show_text(
+                        _("Seek to Skip Credits")
+                        if intro.type == "Credits"
+                        else _("Seek to Skip Intro"),
+                        3000,
+                        1,
+                    )
+                self.is_in_intro = True
+            else:
+                self.is_in_intro = False
+
         while not self.evt_queue.empty():
             func, args = self.evt_queue.get()
             func(*args)
@@ -416,7 +524,11 @@ class PlayerManager(object):
                 self.last_update.restart()
 
     def play(
-        self, video: "Video_type", offset: int = 0, no_initial_timeline: bool = False
+        self,
+        video: "Video_type",
+        offset: int = 0,
+        no_initial_timeline: bool = False,
+        is_initial_play: bool = False,
     ):
         self.should_send_timeline = False
         self.start_time = time.time()
@@ -425,7 +537,7 @@ class PlayerManager(object):
             log.error("PlayerManager::play no URL found")
             return
 
-        self._play_media(video, url, offset, no_initial_timeline)
+        self._play_media(video, url, offset, no_initial_timeline, is_initial_play)
 
     @synchronous("_lock")
     def _play_media(
@@ -434,11 +546,15 @@ class PlayerManager(object):
         url: str,
         offset: int = 0,
         no_initial_timeline: bool = False,
+        is_initial_play: bool = False,
     ):
         self.pause_ignore = True
         self.do_not_handle_pause = True
         self.url = url
         self.menu.hide_menu()
+
+        if self.trickplay:
+            self.trickplay.clear()
 
         if settings.log_decisions:
             log.debug("Playing: {0}".format(url))
@@ -459,6 +575,7 @@ class PlayerManager(object):
             self._player.fs = True
         self._player.force_media_title = video.get_proper_title()
         self._video = video
+        self.is_in_intro = False
         self.external_subtitles = {}
         self.external_subtitles_rev = {}
 
@@ -466,7 +583,7 @@ class PlayerManager(object):
         self.configure_streams()
         self.update_subtitle_visuals()
 
-        if win_utils:
+        if win_utils and settings.raise_mpv and is_initial_play:
             win_utils.raise_mpv()
 
         if offset is not None and offset > 0:
@@ -483,6 +600,9 @@ class PlayerManager(object):
             self.syncplay.play_done()
         else:
             self.set_paused(False, False)
+
+        if self.trickplay:
+            self.trickplay.fetch_thumbnails()
 
         self.should_send_timeline = True
         self.do_not_handle_pause = False
@@ -532,6 +652,9 @@ class PlayerManager(object):
         self.send_timeline_stopped(options=options, client=local_video.client)
         self.exec_stop_cmd()
 
+        if self.trickplay:
+            self.trickplay.clear()
+
     def get_volume(self, percent: bool = False):
         if self._player:
             if not percent:
@@ -579,6 +702,8 @@ class PlayerManager(object):
                 if absolute:
                     if self.syncplay.is_enabled():
                         self.last_seek = offset
+                    if self.is_in_intro and offset > self._player.playback_time:
+                        self.skip_intro()
                     p2 = "absolute"
                     if exact:
                         p2 += "+exact"
@@ -586,6 +711,12 @@ class PlayerManager(object):
                 else:
                     if self.syncplay.is_enabled():
                         self.last_seek = self._player.playback_time + offset
+                    if (
+                        self.is_in_intro
+                        and self._player.playback_time + offset
+                        > self._player.playback_time
+                    ):
+                        self.skip_intro()
                     if exact:
                         self._player.command("seek", offset, "exact")
                     else:
@@ -620,7 +751,8 @@ class PlayerManager(object):
             self.pause_ignore = False
             return
 
-        self._video.set_played()
+        if settings.force_set_played:
+            self._video.set_played()
         if self._video.parent.has_next and settings.auto_play:
             if has_lock:
                 log.debug("PlayerManager::finished_callback starting next episode")
@@ -786,6 +918,10 @@ class PlayerManager(object):
             self.pause_ignore = value
             self._player.pause = value
 
+    @synchronous("_lock")
+    def script_message(self, command, *args):
+        self._player.command("script-message", command, *args)
+
     def get_track_ids(self):
         return self._video.aid, self._video.sid
 
@@ -917,6 +1053,9 @@ class PlayerManager(object):
         if is_using_ext_mpv:
             self._player.terminate()
 
+        if self.trickplay:
+            self.trickplay.stop()
+
     def get_seek_times(self):
         if self._jf_settings is None:
             self._jf_settings = self._video.client.jellyfin.get_user_settings()
@@ -954,13 +1093,16 @@ class PlayerManager(object):
         self._player.osd_font_size = font_size
 
     def enable_osc(self, enabled: bool):
-        if hasattr(self._player, "osc"):
-            self._player.osc = enabled
+        if settings.thumbnail_enable and self.trickplay:
+            self.script_message(
+                "osc-visibility", "auto" if enabled else "never", "False"
+            )
+        else:
+            if hasattr(self._player, "osc"):
+                self._player.osc = enabled
 
     def triggered_menu(self, enabled: bool):
-        self._player.command(
-            "script-message", "shim-menu-enable", "True" if enabled else "False"
-        )
+        self.script_message("shim-menu-enable", "True" if enabled else "False")
 
     def playback_is_aborted(self):
         return self._player.playback_abort
